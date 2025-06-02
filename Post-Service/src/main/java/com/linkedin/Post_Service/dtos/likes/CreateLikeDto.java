@@ -9,5 +9,5 @@ public class CreateLikeDto {
 
     @NotNull
     @Positive
-    private long postId;
+    private Long postId;
 }

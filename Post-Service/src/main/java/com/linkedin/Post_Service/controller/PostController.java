@@ -11,6 +11,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/post")
 public class PostController {
@@ -33,5 +35,16 @@ public class PostController {
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deletePostById(@PathVariable("id") Long id) {
         return postService.deletePostById(id);
+    }
+
+    @GetMapping("")
+    public ResponseEntity<List<PostDto>> getAllPosts() {
+        return postService.getAllPosts();
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<PostDto> getPostById(@PathVariable("id") Long id) {
+
+        return postService.getPostById(id);
     }
 }

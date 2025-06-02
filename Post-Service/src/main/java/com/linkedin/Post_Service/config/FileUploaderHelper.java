@@ -33,4 +33,16 @@ public class FileUploaderHelper {
         return flag;
     }
 
+    public boolean deleteFile(String fileName) {
+        try {
+            File file = new File(fileName);
+            if (file.exists()) {
+                return file.delete();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
 }

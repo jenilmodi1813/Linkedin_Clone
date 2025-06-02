@@ -20,7 +20,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -95,10 +97,33 @@ public class PostServiceImpl implements PostService {
         String fileUrl = null;
 
         Optional<PostFiles> postFiles = postFilesRepository.findByPostId(post.getId());
-        if (postFiles.isPresent()) fileUrl = postFiles.get().getLink();
+//        System.out.println(postFiles.get().getLink());
+        if (postFiles.isPresent()) {
+            fileUrl = postFiles.get().getLink();
+            fileUploaderHelper.deleteFile(fileUrl);
+        }
+
         postRepository.delete(post);
 
         return ResponseEntity.ok().body("Post Deleted ");
+    }
+
+    @Override
+    public ResponseEntity<List<PostDto>> getAllPosts() {
+        List<Post> all = postRepository.findAll();
+
+        List<PostDto> postDtos = all.stream()
+                .map(this::mapToDto)
+                .collect(Collectors.toList());
+        return ResponseEntity.ok().body(postDtos);
+    }
+
+    @Override
+    public ResponseEntity<PostDto> getPostById(Long id) {
+        Optional<Post> byId = postRepository.findById(id);
+        Post post = byId.get();
+
+        return ResponseEntity.ok().body(mapToDto(post));
     }
 
     private PostDto mapToDto(Post post) {
